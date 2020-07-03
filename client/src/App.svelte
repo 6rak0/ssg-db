@@ -50,6 +50,23 @@
     const response = await axios.post("/api/reportes", reporte);
     $reportes = [response.data, ...$reportes];
     showModal = false;
+    reporte = {
+      id: null,
+      descripcion: null,
+      nombre: null,
+      fraccion: null,
+      ligamento: null,
+      lig: null,
+      aca: null,
+      acabado: null,
+      composicion: null,
+      filfib: null,
+      ancho: null,
+      gramaje: null,
+      tejido: null,
+      otros: null,
+      conclusion: null
+    };
   }
 
   async function deleteReporte(id) {

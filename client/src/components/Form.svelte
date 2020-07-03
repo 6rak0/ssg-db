@@ -98,7 +98,7 @@
         <option value="">Elige</option>
         <option value="Filamento continuo">Filamento continuo</option>
         <option value="Fibra discontinua">Fibra discontinua</option>
-        <option value="Filamento y Fibra discontinua">
+        <option value="Filamento y fibra discontinua">
           Filamento y fibra discontinua
         </option>
       </select>

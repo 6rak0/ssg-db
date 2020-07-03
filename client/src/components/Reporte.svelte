@@ -28,7 +28,7 @@
     pdf.text(30, 130, `Ancho: ${reporte.ancho || "n/a"}`);
     pdf.text(30, 140, `Otros datos: ${reporte.otros || "n/a"}`);
     pdf.text(30, 150, `Conclusión: ${reporte.conclusión || "n/a"}`);
-    pdf.save(`${reporte.nombre}-${reporte.fraccion}.pdf`);
+    pdf.save(`${reporte.id}-${reporte.fraccion}.pdf`);
   }
 
   async function handleUpdate(e) {
@@ -39,13 +39,19 @@
   }
 </script>
 
-<div class="card mb-3 has-background-info-light" transition:slide>
-  <header class="card-header">
-    <p class="card-header-title has-text-info">
+<div class="card mb-3" transition:slide>
+  <header
+    class="card-header has-background-info-light"
+    style="cursor:pointer"
+    role="button"
+    on:click={e => {
+      e.target.parentElement.nextElementSibling.hidden = !e.target.parentElement.nextElementSibling.hidden;
+    }}>
+    <p class="card-header-title has-text-primary">
       Id: {reporte.id} - Fracción: {reporte.fraccion} - {reporte.descripcion || ''}
     </p>
     <!-- svelte-ignore a11y-missing-attribute-->
-    <a
+    <!-- <a
       role="button"
       class="card-header-icon"
       aria-label="more options"
@@ -53,7 +59,7 @@
         e.target.parentElement.parentElement.nextElementSibling.hidden = !e.target.parentElement.parentElement.nextElementSibling.hidden;
       }}>
       <span class="icon">></span>
-    </a>
+    </a> -->
   </header>
   <div class="card-content" hidden>
     <div class="content">
@@ -100,11 +106,11 @@
         </tr>
         <tr>
           <td>Fecha de reporte:</td>
-          <td>{new Date(reporte.creado).toLocaleString() || 'n/a'}</td>
+          <td>{new Date(reporte.creado).toLocaleDateString() || 'n/a'}</td>
         </tr>
         <tr>
           <td>Fecha de edición:</td>
-          <td>{new Date(reporte.editado).toLocaleString() || 'n/a'}</td>
+          <td>{new Date(reporte.editado).toLocaleDateString() || 'n/a'}</td>
         </tr>
       </table>
     </div>
