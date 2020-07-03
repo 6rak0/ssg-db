@@ -41,29 +41,19 @@
 
 <div class="card mb-3" transition:slide>
   <header
-    class="card-header has-background-info-light"
+    class="card-header has-background-white-ter"
     style="cursor:pointer"
     role="button"
     on:click={e => {
       e.target.parentElement.nextElementSibling.hidden = !e.target.parentElement.nextElementSibling.hidden;
     }}>
-    <p class="card-header-title has-text-primary">
-      Id: {reporte.id} - Fracción: {reporte.fraccion} - {reporte.descripcion || ''}
+    <p class="card-header-title has-text-grey">
+      {reporte.id} | - | {reporte.fraccion} | - | {reporte.descripcion || ''}
     </p>
-    <!-- svelte-ignore a11y-missing-attribute-->
-    <!-- <a
-      role="button"
-      class="card-header-icon"
-      aria-label="more options"
-      on:click={e => {
-        e.target.parentElement.parentElement.nextElementSibling.hidden = !e.target.parentElement.parentElement.nextElementSibling.hidden;
-      }}>
-      <span class="icon">></span>
-    </a> -->
   </header>
   <div class="card-content" hidden>
     <div class="content">
-      <table id={reporte.id}>
+      <table>
         <tr>
           <td>Nombre:</td>
           <td>{reporte.nombre || 'n/a'}</td>

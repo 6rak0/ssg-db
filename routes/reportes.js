@@ -6,62 +6,55 @@ const router = Router()
 router.get('/', async (req, res) => {
   try {
     const reportes = await Reporte.find()
-    if(!reportes){
-      throw new Error('No existen reportes.')
-    }
-    res.status(200).json(reportes)
+    res.json(reportes)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
+
+router.post('/', async (req, res) => {
+  const nuevoReporte = new Reporte(req.body)
+  try {
+    await nuevoReporte.save()
+    res.status(201).json(nuevoReporte)
+  } catch (error) {
+    res.status(400).json({message:error.message})
+  }
+})
+
+router.put('/:id', getReporte, async (req, res) => {
+  try {
+     await Reporte.findByIdAndUpdate(req.params.id, req.body, {new:true,useFindAndModify:false},
+      (err, todo) => {
+          if (err) return res.status(500).json({message:err.message});
+          return res.send(todo);
+      })
   } catch (error) {
     res.status(400).json({message: error.message})
   }
 })
 
-router.post('/', async (req, res) => {
-  const reporte = req.body
-  const nuevoReporte = new Reporte(reporte)
+router.delete('/:id', getReporte, async (req, res) => {
   try {
-    const reporte = await nuevoReporte.save()
-    if(!reporte){
-      throw new Error('Ocurrió un error al guardar el reporte.')
-    }
-    res.status(200).json(reporte)
+    await res.reporte.deleteOne()
+    res.json({message:'reporte eliminado correctamente', id:res.reporte._id})
   } catch (error) {
     res.status(500).json({message:error.message})
   }
 })
 
-router.put('/:id', async (req, res) => {
-  const {id} = req.params
-  const reporte = req.body
+async function getReporte(req, res, next){
+  let reporte
   try {
-    if(!reporte){
-      throw new Error('No se encontró el reporte')
+    reporte = await Reporte.findById(req.params.id)
+    if(reporte == null){
+      return res.status(404).json({message:'reporte no encontrado'})
     }
-    Reporte.findByIdAndUpdate(id,reporte,{new:true},
-      (err, todo) => {
-      // Handle any possible database errors
-          if (err) return res.status(500).send(err);
-          return res.send(todo);
-      })
   } catch (error) {
-    res.status(404).json({message: error.message})
+    return res.status(500).json({message:error.message})
   }
-})
-
-router.delete('/:id', async (req, res) => {
-  const {id} = req.params
-try {
-  const reporte = Reporte.findById(id)
-  if(!reporte){
-    throw new Error('No se encontró reporte')
-  }
-  const removed = await reporte.remove()
-  if(!removed){
-    throw new Error('Ocurrió un problema al eliminar el reporte')
-  }
-  res.status(200).json({id})
-} catch (error) {
-  res.status(404).json({message: error.message})
+  res.reporte = reporte
+  next()
 }
-})
 
 module.exports = router

@@ -1,19 +1,15 @@
+require('dotenv').config();
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const cors = require('cors')
-const bodyparser = require('body-parser')
-const morgan = require('morgan')
 const path = require('path')
 
-const { port, mongoURI } = require('./config')
+const port = process.env.PORT || 3000
 const reportesRoutes = require('./routes/reportes')
 
-app.use(cors())
-app.use(bodyparser.json())
-app.use(morgan('tiny'))
+app.use(express.json())
 
-mongoose.connect(mongoURI, {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true
