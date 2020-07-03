@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "jspdf": "^1.5.3",
     "svelte": "^3.21.0"
   },
   "devDependencies": {

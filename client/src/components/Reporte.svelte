@@ -1,5 +1,6 @@
 <script>
   import { slide } from "svelte/transition";
+  import jsPDF from "jspdf";
   import { createEventDispatcher } from "svelte";
   import axios from "axios/index";
 
@@ -11,6 +12,25 @@
   export let reporte;
   let showModal = false;
 
+  function handleShare() {
+    console.log("this works");
+    const pdf = new jsPDF();
+    pdf.text(30, 30, `Id: ${reporte.id}`);
+    pdf.text(30, 40, `Fracción: ${reporte.fraccion}`);
+    pdf.text(30, 50, `Descripción: ${reporte.descripción || "n/a"}`);
+    pdf.text(30, 60, `Nombre: ${reporte.nombre || "n/a"}`);
+    pdf.text(30, 70, `Ligamento: ${reporte.lig || reporte.ligamento || "n/a"}`);
+    pdf.text(30, 80, `Acabado: ${reporte.aca || reporte.acabado || "n/a"}`);
+    pdf.text(30, 90, `Composición: ${reporte.composicion || "n/a"}`);
+    pdf.text(30, 100, `Filamento o Fibra: ${reporte.filfib || "n/a"}`);
+    pdf.text(30, 110, `Tejido: ${reporte.tejido || "n/a"}`);
+    pdf.text(30, 120, `Gramaje en g/m2: ${reporte.gramaje || "n/a"}`);
+    pdf.text(30, 130, `Ancho: ${reporte.ancho || "n/a"}`);
+    pdf.text(30, 140, `Otros datos: ${reporte.otros || "n/a"}`);
+    pdf.text(30, 150, `Conclusión: ${reporte.conclusión || "n/a"}`);
+    pdf.save(`${reporte.nombre}-${reporte.fraccion}.pdf`);
+  }
+
   async function handleUpdate(e) {
     reporte = e.detail;
     reporte.editado = new Date().getTime();
@@ -19,13 +39,9 @@
   }
 </script>
 
-<style>
-
-</style>
-
-<div class="card mb-3" transition:slide>
+<div class="card mb-3 has-background-info-light" transition:slide>
   <header class="card-header">
-    <p class="card-header-title">
+    <p class="card-header-title has-text-info">
       Id: {reporte.id} - Fracción: {reporte.fraccion} - {reporte.descripcion || ''}
     </p>
     <!-- svelte-ignore a11y-missing-attribute-->
@@ -94,7 +110,7 @@
     </div>
     <footer class="card-footer" hidden>
       <!-- svelte-ignore a11y-missing-attribute-->
-      <a class="card-footer-item">Compartir</a>
+      <a class="card-footer-item" on:click={handleShare}>Compartir</a>
       <!-- svelte-ignore a11y-missing-attribute-->
       <a class="card-footer-item" on:click={() => (showModal = true)}>Editar</a>
       <!-- svelte-ignore a11y-missing-attribute-->

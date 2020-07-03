@@ -29,11 +29,15 @@
   let showModal = false;
   let loading = false;
 
-  onMount(async () => {
+  async function load() {
     loading = true;
     const { data } = await axios.get("/api/reportes");
     $reportes = data;
     loading = false;
+  }
+
+  onMount(() => {
+    load();
   });
 
   function search() {
@@ -87,7 +91,7 @@
       </div>
     </form>
     <button class="button is-primary" on:click={() => (showModal = true)}>
-      Agregar
+      agregar
     </button>
   </div>
   <hr />
@@ -99,8 +103,9 @@
       <Reporte on:delete={deleteReporte} {reporte} />
     {/each}
   {:else if !loading}
-    <div class="notification has-text-centered">
-      No hay reportes con esa fracción
+    <div class="notification has-text-centered has-background-warning-light">
+      <p>No hay reportes con esa fracción</p>
+      <button class="button is-warning" on:click={load}>recargar</button>
     </div>
   {/if}
 </div>

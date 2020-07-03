@@ -1,6 +1,6 @@
 {
   "name": "full-stack-test",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "full-stack-test",
   "main": "server.js",
   "scripts": {
