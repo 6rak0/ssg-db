@@ -8,6 +8,21 @@
   import Form from "./components/Form.svelte";
   import Loading from "./components/Loading.svelte";
 
+  let user = { name: null, password: null };
+
+  async function login() {
+    const response = await axios.post("/api/login", user);
+    isLogged = true;
+    user.name = null;
+    user.password = null;
+    load();
+  }
+
+  async function logOut() {
+    const response = await axios.get("/api/logout");
+    isLogged = false;
+  }
+
   let reporte = {
     id: null,
     descripcion: null,
@@ -28,6 +43,7 @@
   let query;
   let showModal = false;
   let loading = false;
+  let isLogged = false;
 
   async function load() {
     loading = true;
@@ -36,9 +52,9 @@
     loading = false;
   }
 
-  onMount(() => {
-    load();
-  });
+  // onMount(() => {
+  //   load();
+  // });
 
   function search() {
     $reportes = $reportes.filter(r => r.fraccion === query);
@@ -82,53 +98,91 @@
     max-width: 90%;
     margin: 0 auto;
   }
-  .container {
+  .top {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+  }
+  .top > * {
+    margin: 5px 0;
+  }
+
+  @media screen and (max-width: 768px) {
+    .top {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  .login {
+    max-width: 350px;
+    text-align: center;
+    margin: 200px auto;
+  }
+  .login > * {
+    margin: 5px 0;
   }
 </style>
 
-<div class="app">
-  <h1 class="subtitle is-1 has-text-centered">Base de datos</h1>
-  <div class="container ">
-    <form on:submit|preventDefault={search}>
-      <div class="field has-addons">
-        <div class="control">
-          <input
-            class="input"
-            type="text"
-            pattern="\d\d\d\d\.\d\d\.\d\d"
-            placeholder="XXXX.XX.XX"
-            bind:value={query} />
+{#if isLogged}
+  <div class="app">
+    <h1 class="subtitle is-1 has-text-centered">Base de datos</h1>
+    <div class="top">
+      <form on:submit|preventDefault={search}>
+        <div class="field has-addons">
+          <div class="control">
+            <input
+              class="input"
+              type="text"
+              pattern="\d\d\d\d\.\d\d\.\d\d"
+              placeholder="XXXX.XX.XX"
+              bind:value={query} />
+          </div>
+          <div class="control">
+            <!-- svelte-ignore a11y-missing-attribute-->
+            <button class="button is-info">buscar</button>
+          </div>
         </div>
-        <div class="control">
-          <!-- svelte-ignore a11y-missing-attribute-->
-          <button class="button is-info">buscar</button>
-        </div>
-      </div>
-    </form>
-    <button class="button is-primary" on:click={() => (showModal = true)}>
-      agregar
-    </button>
-  </div>
-  <hr />
-  {#if loading}
-    <Loading />
-  {/if}
-  {#if $reportes.length > 0}
-    {#each $reportesOrdenados as reporte (reporte.id)}
-      <Reporte on:delete={deleteReporte} {reporte} />
-    {/each}
-  {:else if !loading}
-    <div class="notification has-text-centered has-background-warning-light">
-      <p>No hay reportes con esa fracción</p>
-      <button class="button is-warning" on:click={load}>recargar</button>
+      </form>
+      <button class="button is-primary" on:click={() => (showModal = true)}>
+        agregar
+      </button>
+      <button class="button is-danger" on:click={logOut}>cerrar sesión</button>
     </div>
-  {/if}
-</div>
+    <hr />
+    {#if loading}
+      <Loading />
+    {/if}
+    {#if $reportes.length > 0}
+      {#each $reportesOrdenados as reporte (reporte.id)}
+        <Reporte on:delete={deleteReporte} {reporte} />
+      {/each}
+    {:else if !loading}
+      <div class="notification has-text-centered has-background-warning-light">
+        <p>No hay reportes con esa fracción</p>
+        <button class="button is-warning" on:click={load}>recargar</button>
+      </div>
+    {/if}
+  </div>
 
-{#if showModal}
-  <Modal title="Nuevo reporte" on:close={() => (showModal = false)}>
-    <Form on:submit={handleSubmit} {reporte} />
-  </Modal>
+  {#if showModal}
+    <Modal title="Nuevo reporte" on:close={() => (showModal = false)}>
+      <Form on:submit={handleSubmit} {reporte} />
+    </Modal>
+  {/if}
+{:else}
+  <form on:submit|preventDefault={login}>
+    <div class="login">
+      <input
+        class="input"
+        type="text"
+        placeholder="nombre"
+        bind:value={user.name} />
+      <input
+        class="input"
+        type="password"
+        placeholder="password"
+        bind:value={user.password} />
+      <button class="button is-primary">iniciar sesión</button>
+    </div>
+  </form>
 {/if}

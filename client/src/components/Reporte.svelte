@@ -13,7 +13,6 @@
   let showModal = false;
 
   function handleShare() {
-    console.log("this works");
     const pdf = new jsPDF();
     pdf.text(30, 30, `Id: ${reporte.id}`);
     pdf.text(30, 40, `Fracción: ${reporte.fraccion}`);

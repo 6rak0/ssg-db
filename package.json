@@ -1,6 +1,6 @@
 {
   "name": "full-stack-test",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "full-stack-test",
   "main": "server.js",
   "scripts": {
@@ -13,8 +13,13 @@
   "author": "6rak0",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "connect-flash": "^0.1.1",
     "express": "^4.17.1",
-    "mongoose": "^5.9.20"
+    "express-session": "^1.17.1",
+    "mongoose": "^5.9.20",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "concurrently": "^5.2.0",

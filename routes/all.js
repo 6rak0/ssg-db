@@ -1,7 +1,6 @@
 const {Router} = require('express')
-const path = require('path')
-const bcrypt = require('bcrypt')
 const passport = require('passport')
+//const bcrypt = require('bcrypt')
 const Reporte = require('../models/reportes')
 const User = require('../models/users')
 const router = Router()
@@ -13,7 +12,32 @@ initializePassport(
   async id => await User.findById(id)
 )
 
-router.get('/api/reportes', checkAuthenticated, async (req, res) => {
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureFlash: true
+}))
+
+router.get('/logout', function(req, res){
+  try {
+    req.logout();
+    res.json({message:'logged out'})
+  } catch (error) {
+    res.json({message:error.message})
+  }
+});
+
+// router.post('/registro',checkNotAuthenticated, async (req, res) => {
+//   const hashedPassword = await bcrypt.hash(req.body.password, 10)
+//   const newUser = new User({name:req.body.name, password: hashedPassword})
+//   try {
+//     await newUser.save()
+//     res.status(201)
+//   } catch (error) {
+//     res.json({message:error.message})
+//   }
+// })
+
+router.get('/reportes', checkAuthenticated, async (req, res) => {
   try {
     const reportes = await Reporte.find()
     res.json(reportes)
@@ -22,7 +46,7 @@ router.get('/api/reportes', checkAuthenticated, async (req, res) => {
   }
 })
 
-router.post('/api/reportes', checkAuthenticated, async (req, res) => {
+router.post('/reportes', checkAuthenticated, async (req, res) => {
   const nuevoReporte = new Reporte(req.body)
   try {
     await nuevoReporte.save()
@@ -32,7 +56,7 @@ router.post('/api/reportes', checkAuthenticated, async (req, res) => {
   }
 })
 
-router.put('/api/reportes/:id', checkAuthenticated, getReporte, async (req, res) => {
+router.put('/reportes/:id', checkAuthenticated, getReporte, async (req, res) => {
   try {
      await Reporte.findByIdAndUpdate(req.params.id, req.body, {new:true,useFindAndModify:false},
       (err, todo) => {
@@ -44,7 +68,7 @@ router.put('/api/reportes/:id', checkAuthenticated, getReporte, async (req, res)
   }
 })
 
-router.delete('/api/reportes/:id', checkAuthenticated, getReporte, async (req, res) => {
+router.delete('/reportes/:id', checkAuthenticated, getReporte, async (req, res) => {
   try {
     await res.reporte.deleteOne()
     res.json({message:'reporte eliminado correctamente', id:res.reporte._id})
@@ -71,7 +95,13 @@ function checkAuthenticated(req, res, next){
   if(req.isAuthenticated()){
     return next()
   }
-  res.redirect('/login')
 }
+
+// function checkNotAuthenticated(req, res, next){
+//   if(req.isAuthenticated()){
+//     return res.redirect('/')
+//   }
+//   next()
+// }
 
 module.exports = router
