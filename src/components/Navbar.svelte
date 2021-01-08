@@ -17,6 +17,7 @@
       <i class="fas fa-database" />
       <a href="/">inicio</a>
       <a href="/reportes">reportes</a>
+      <a href="/nuevo">agregar nuevo</a>
     </div>
     <!-- botón login/logout -->
     <div><a href="/login">login</a></div>
@@ -24,15 +25,13 @@
   {#if isMenuOpen}
     <div transition:slide={{ duration: 800 }} class="block sm:hidden">
       <div class="px-2 pt-2 pb-3 space-y-1">
-        <!-- <a
-          href="#horario"
-          class="text-red-400 hover:bg-red-400 hover:text-white block px-3 py-2 rounded-md text-base font-medium">horario</a>
-        <a
-          href="#contacto"
-          class="text-red-400 hover:bg-red-400 hover:text-white block px-3 py-2 rounded-md text-base font-medium">contacto</a> -->
         <a
           href="/reportes"
           class="text-red-400 hover:bg-red-400 hover:text-white block px-3 py-2 rounded-md text-base font-medium">reportes</a>
+        <a
+          href="/nuevo"
+          class="text-red-400 hover:bg-red-400 hover:text-white block px-3 py-2 rounded-md text-base font-medium">agregar
+          nuevo</a>
       </div>
     </div>
   {/if}

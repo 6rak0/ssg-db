@@ -1,11 +1,8 @@
 <style>
-  .max-w {
-    max-width: 100%;
-  }
-  @media (min-width: 1024px) {
-    .max-w {
-      max-width: 50%;
-    }
+  input {
+    height: 2rem;
+    margin-block: 4px;
+    border-block-end: 1px solid black;
   }
 </style>
 
@@ -13,14 +10,14 @@
   <form class="text-center p-5 relative rounded shadow">
     <div class="flex items-center text-gray-600 my-4 w-full">
       <input
-        class="rounded w-full h-12 p-2"
+        class="w-full h-12 p-2"
         type="text"
         placeholder="usuario"
         required />
     </div>
     <div class="text-gray-600 my-4 w-full">
       <input
-        class="rounded w-full h-12 p-2"
+        class="w-full h-12 p-2"
         type="password"
         placeholder="contraseña"
         required />
