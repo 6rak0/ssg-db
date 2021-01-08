@@ -1,6 +1,8 @@
 <script>
-  import { slide } from 'svelte/transition'
-  let isMenuOpen = false
+  import { slide } from "svelte/transition";
+  import Login from "./Login.svelte";
+
+  let isMenuOpen = false;
 </script>
 
 <nav class="bg-green-100">
@@ -20,7 +22,7 @@
       <a href="/nuevo">agregar nuevo</a>
     </div>
     <!-- botón login/logout -->
-    <div><a href="/login">login</a></div>
+    <Login />
   </div>
   {#if isMenuOpen}
     <div transition:slide={{ duration: 800 }} class="block sm:hidden">
