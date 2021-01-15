@@ -1,6 +1,8 @@
 <script>
-  import reports from '../stores/defaultReports'
-  import Modal from '../components/Modal.svelte'
+  import reports from "../stores/reports";
+  import Modal from "../components/Modal.svelte";
+  import setReport from "../strapi/setReport";
+  import userStore from "../stores/user";
 
   let int,
     fraccion,
@@ -15,10 +17,10 @@
     gramaje,
     ancho,
     tejido,
-    otros,
-    conclusion
+    otro,
+    conclusion;
 
-  let isModalOpen = false
+  let isModalOpen = false;
   function handleSubmit() {
     const newReport = {
       int,
@@ -34,11 +36,12 @@
       gramaje,
       ancho,
       tejido,
-      otros,
+      otro,
       conclusion,
-    }
-    $reports = [...$reports, newReport]
-    isModalOpen = true
+    };
+    $reports = [...$reports, newReport];
+    setReport(newReport, $userStore.jwt);
+    isModalOpen = true;
   }
 </script>
 
@@ -60,51 +63,50 @@
 
 <section class="p-6 lg:max-w-screen-sm mx-auto">
   <form class="flex flex-col" on:submit|preventDefault={handleSubmit}>
-    <input type="number" placeholder="id interno" required bind:value={int} />
+    <input type="number" placeholder="id interno" bind:value={int} />
     <input
       type="text"
       pattern="\d\d\d\d\.\d\d\.\d\d"
       placeholder="fracción"
-      required
       bind:value={fraccion} />
     <input type="text" placeholder="descripción" bind:value={descripcion} />
-    <input type="nombre" placeholder="nombre" bid:value={nombre} />
-    <select class="bg-white" required bind:value={ligamento}>
+    <input type="nombre" placeholder="nombre" bind:value={nombre} />
+    <select class="bg-white" bind:value={ligamento}>
       <option value="" disabled selected>tipo de ligamento</option>
-      <option value="tafetán">tafetán</option>
+      <option value="tafetan">tafetán</option>
       <option value="sarga">sarga</option>
-      <option value="satín">satín</option>
+      <option value="satin">satín</option>
       <option value="otro">otro</option>
     </select>
     {#if ligamento === 'otro'}
       <input type="text" placeholder="ligamento" bind:value={lig} />
     {/if}
-    <select class="bg-white" required bind:value={acabado}>
+    <select class="bg-white" bind:value={acabado}>
       <option value="" disabled selected>tipo de acabado</option>
-      <option value="Crudo">crudo</option>
-      <option value="Blanqueado">blanqueado</option>
-      <option value="Teñido">teñido</option>
-      <option value="Preteñido">preteñido</option>
-      <option value="Estampado">estampado</option>
-      <option value="Otro">otro</option>
+      <option value="crudo">crudo</option>
+      <option value="blanqueado">blanqueado</option>
+      <option value="tenido">teñido</option>
+      <option value="pretenido">preteñido</option>
+      <option value="estampado">estampado</option>
+      <option value="otro">otro</option>
     </select>
     {#if acabado === 'otro'}
       <input type="text" placeholder="acabado" bind:value={aca} />
     {/if}
-    <select class="bg-white" required bind:value={filfib}>
+    <select class="bg-white" bind:value={filfib}>
       <option value="" disabled selected>tipo de filamento</option>
-      <option value="Filamento continuo">filamento continuo</option>
-      <option value="Fibra discontinua">fibra discontinua</option>
-      <option value="Filamento y fibra discontinua">
-        filamento y fibra discontinua
-      </option>
+      <option value="filamento">filamento</option>
+      <option value="fibra">fibra</option>
     </select>
     <input type="text" placeholder="composición" bind:value={composicion} />
-    <input type="text" placeholder="tejido" bind:value={tejido} />
-    <input type="text" placeholder="gramaje en g/m2" bind:value={gramaje} />
-    <input type="text" placeholder="ancho en cm" bind:value={ancho} />
-    <input type="text" placeholder="gramaje en g/m2" bind:value={gramaje} />
-    <textarea cols="30" rows="6" placeholder="otros datos" bind:value={otros} />
+    <select class="bg-white" bind:value={tejido}>
+      <option value="" disabled selected>tipo de tejido</option>
+      <option value="uyt">urdimbre y trama</option>
+      <option value="punto">punto</option>
+    </select>
+    <input type="number" placeholder="gramaje en g/m2" bind:value={gramaje} />
+    <input type="number" placeholder="ancho en cm" bind:value={ancho} />
+    <textarea cols="30" rows="6" placeholder="otros datos" bind:value={otro} />
     <textarea
       cols="30"
       rows="6"
@@ -114,7 +116,7 @@
       class="w-1/2 mx-auto m-3 p-3 bg-indigo-500 ring-2 ring-indigo-300 text-white rounded">guardar</button>
   </form>
   {#if isModalOpen}
-    <Modal title={'-/-'} on:close={() => (isModalOpen = false)}>
+    <Modal title={'👍'} on:close={() => (isModalOpen = false)}>
       <p>reporte guardado</p>
     </Modal>
   {/if}

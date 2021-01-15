@@ -1,5 +1,5 @@
 <script>
-  export let report
+  export let report;
 </script>
 
 <a href="/reporte/{report.id}">

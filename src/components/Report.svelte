@@ -1,25 +1,56 @@
 <script>
-  import jsPDF from 'jspdf'
-  export let report
+  import jsPDF from "jspdf";
+  export let report;
 
   function handleShare() {
-    const pdf = new jsPDF()
-    pdf.text(30, 30, `Id: ${report.int}`)
-    pdf.text(30, 40, `Fracción: ${report.fraccion}`)
-    pdf.text(30, 50, `Descripción: ${report.descripcion || 'n/a'}`)
-    pdf.text(30, 60, `Nombre: ${report.nombre || 'n/a'}`)
-    pdf.text(30, 70, `Ligamento: ${report.lig || report.ligamento || 'n/a'}`)
-    pdf.text(30, 80, `Acabado: ${report.aca || report.acabado || 'n/a'}`)
-    pdf.text(30, 90, `Composición: ${report.composicion || 'n/a'}`)
-    pdf.text(30, 100, `Filamento o Fibra: ${report.filfib || 'n/a'}`)
-    pdf.text(30, 110, `Tejido: ${report.tejido || 'n/a'}`)
-    pdf.text(30, 120, `Gramaje en g/m2: ${report.gramaje || 'n/a'}`)
-    pdf.text(30, 130, `Ancho: ${report.ancho || 'n/a'}`)
-    pdf.text(30, 140, `Otros datos: ${report.otros || 'n/a'}`)
-    pdf.text(30, 150, `Conclusión: ${report.conclusion || 'n/a'}`)
-    pdf.save(`${report.int}-${report.fraccion}.pdf`)
+    const pdf = new jsPDF();
+    pdf.text(30, 30, `Id: ${report.int}`);
+    pdf.text(30, 40, `Fracción: ${report.fraccion}`);
+    pdf.text(30, 50, `Descripción: ${report.descripcion || "n/a"}`);
+    pdf.text(30, 60, `Nombre: ${report.nombre || "n/a"}`);
+    pdf.text(
+      30,
+      70,
+      `Tipo de ligamento: ${report.lig || report.ligamento || "n/a"}`
+    );
+    pdf.text(
+      30,
+      80,
+      `Tipo de acabado: ${report.aca || report.acabado || "n/a"}`
+    );
+    pdf.text(30, 90, `Composición: ${report.composicion || "n/a"}`);
+    pdf.text(30, 100, `${report.filfib || "n/a"}`);
+    pdf.text(30, 110, `Tipo de tejido: ${report.tejido || "n/a"}`);
+    pdf.text(30, 120, `Peso en gramos/m²${report.gramaje || "n/a"}`);
+    pdf.text(30, 130, `Ancho en cm: ${report.ancho || "n/a"}`);
+    pdf.text(30, 140, `Otros datos: ${report.otro || "n/a"}`);
+    pdf.text(30, 150, `Conclusión: ${report.conclusion || "n/a"}`);
+    pdf.save(`${report.int}-${report.fraccion}.pdf`);
   }
 </script>
+
+<style>
+  td {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  td:first-child {
+    padding-left: 0;
+  }
+
+  td:last-child {
+    padding-right: 0;
+  }
+
+  table {
+    border-spacing: 60px 0px;
+  }
+</style>
+
+<svelte:head>
+  <title>{report.name}</title>
+</svelte:head>
 
 <div class="p-3 md:p-12">
   <div>
@@ -29,7 +60,7 @@
         <td>{report.nombre}</td>
       </tr>
       <tr>
-        <td>int:</td>
+        <td>id:</td>
         <td>{report.int}</td>
       </tr>
       <tr>
@@ -61,7 +92,7 @@
         <td>{report.tejido}</td>
       </tr>
       <tr>
-        <td>gramaje en g/m2:</td>
+        <td>gramaje en g/m²:</td>
         <td>{report.gramaje}</td>
       </tr>
       <tr>
@@ -70,7 +101,7 @@
       </tr>
       <tr>
         <td>otros datos:</td>
-        <td>{report.otros}</td>
+        <td>{report.otro}</td>
       </tr>
       <tr>
         <td>conclusión:</td>

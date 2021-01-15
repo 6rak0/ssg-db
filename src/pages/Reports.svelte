@@ -1,10 +1,9 @@
 <script>
-  import reports from '../stores/defaultReports'
+  import reportes from "../stores/reports";
+  import ReportSmall from "../components/ReportSmall.svelte";
 
-  import ReportSmall from '../components/ReportSmall.svelte'
-
-  let query = ''
-  $: filteredReports = $reports.filter((item) => item.int === parseInt(query))
+  let query = "";
+  $: filteredReports = $reportes.filter((item) => item.fraccion === query);
 </script>
 
 <style>
@@ -16,6 +15,10 @@
   }
 </style>
 
+<svelte:head>
+  <title>reportes</title>
+</svelte:head>
+
 <section class="p-6 lg:max-w-screen-sm mx-auto">
   <input
     class="px-3 w-full"
@@ -24,7 +27,7 @@
     bind:value={query} />
 
   {#if !query}
-    {#each $reports as report (report.id)}
+    {#each $reportes as report}
       <ReportSmall {report} />
     {/each}
   {:else if filteredReports.length == 0}

@@ -1,32 +1,16 @@
 <script>
-  import reports from '../stores/defaultReports'
-  import Modal from '../components/Modal.svelte'
+  import reports from "../stores/reports";
+  import Modal from "../components/Modal.svelte";
+  import editReport from "../strapi/editReport";
+  import userStore from "../stores/user";
 
-  export let id
-  import Loading from '../components/Loading.svelte'
-  $: report = $reports.find((item) => item.id === parseInt(id))
+  export let id;
+  $: report = $reports.find((item) => item.id === parseInt(id));
+  let isModalOpen = false;
 
-  // let int,
-  //   fraccion,
-  //   descripcion,
-  //   nombre,
-  //   ligamento,
-  //   lig,
-  //   acabado,
-  //   aca,
-  //   composicion,
-  //   filfib,
-  //   gramaje,
-  //   ancho,
-  //   tejido,
-  //   otros,
-  //   conclusion
-
-  let isModalOpen = false
   function handleSubmit() {
-    const newReport = report
-    $reports = [...$reports, newReport]
-    isModalOpen = true
+    editReport(id, report, $userStore.jwt);
+    isModalOpen = true;
   }
 </script>
 
@@ -46,6 +30,10 @@
   }
 </style>
 
+<svelte:head>
+  <title>{report.name}</title>
+</svelte:head>
+
 <section class="p-6 lg:max-w-screen-sm mx-auto">
   <form class="flex flex-col" on:submit|preventDefault={handleSubmit}>
     <input
@@ -64,55 +52,52 @@
       placeholder="descripción"
       bind:value={report.descripcion} />
     <input type="nombre" placeholder="nombre" bind:value={report.nombre} />
-    <select class="bg-white" required bind:value={report.ligamento}>
+    <select class="bg-white" bind:value={report.ligamento}>
       <option value="" disabled selected>tipo de ligamento</option>
-      <option value="tafetán">tafetán</option>
+      <option value="tafetan">tafetán</option>
       <option value="sarga">sarga</option>
-      <option value="satín">satín</option>
+      <option value="satin">satín</option>
       <option value="otro">otro</option>
     </select>
     {#if report.ligamento === 'otro'}
       <input type="text" placeholder="ligamento" bind:value={report.lig} />
     {/if}
-    <select class="bg-white" required bind:value={report.acabado}>
+    <select class="bg-white" bind:value={report.acabado}>
       <option value="" disabled selected>tipo de acabado</option>
-      <option value="Crudo">crudo</option>
-      <option value="Blanqueado">blanqueado</option>
-      <option value="Teñido">teñido</option>
-      <option value="Preteñido">preteñido</option>
-      <option value="Estampado">estampado</option>
-      <option value="Otro">otro</option>
+      <option value="crudo">crudo</option>
+      <option value="blanqueado">blanqueado</option>
+      <option value="tenido">teñido</option>
+      <option value="pretenido">preteñido</option>
+      <option value="estampado">estampado</option>
+      <option value="otro">otro</option>
     </select>
     {#if report.acabado === 'otro'}
       <input type="text" placeholder="acabado" bind:value={report.aca} />
     {/if}
-    <select class="bg-white" required bind:value={report.filfib}>
+    <select class="bg-white" bind:value={report.filfib}>
       <option value="" disabled selected>tipo de filamento</option>
-      <option value="Filamento continuo">filamento continuo</option>
-      <option value="Fibra discontinua">fibra discontinua</option>
-      <option value="Filamento y fibra discontinua">
-        filamento y fibra discontinua
-      </option>
+      <option value="filamento">filamento</option>
+      <option value="fibra">fibra</option>
     </select>
     <input
       type="text"
       placeholder="composición"
       bind:value={report.composicion} />
-    <input type="text" placeholder="tejido" bind:value={report.tejido} />
+    <select class="bg-white" bind:value={report.tejido}>
+      <option value="" disabled selected>tipo de tejido</option>
+      <option value="uyt">urdimbre y trama</option>
+      <option value="punto">punto</option>
+    </select>
     <input
-      type="text"
+      type="number"
       placeholder="gramaje en g/m2"
       bind:value={report.gramaje} />
-    <input type="text" placeholder="ancho en cm" bind:value={report.ancho} />
-    <input
-      type="text"
-      placeholder="gramaje en g/m2"
-      bind:value={report.gramaje} />
+    <input type="number" placeholder="ancho en cm" bind:value={report.ancho} />
     <textarea
       cols="30"
       rows="6"
       placeholder="otros datos"
-      bind:value={report.otros} />
+      bind:value={report.otro} />
     <textarea
       cols="30"
       rows="6"
